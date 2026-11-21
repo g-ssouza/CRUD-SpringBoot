@@ -1,0 +1,76 @@
+package com.produtoapi.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotEmpty;
+
+@Entity
+public class Produto {
+    @Id
+    @GeneratedValue (strategy = GenerationType.AUTO)
+    private long id;
+
+    @NotEmpty (message = "Informe um nome.")
+    private String nome;
+    private int quantidade;
+    private double preco;
+    private String status;
+
+    public Produto(String nome, int quantidade, double preco, String status){
+        this.nome = nome;
+        this.quantidade = quantidade;
+        this.preco = preco;
+        this.status = status;
+    }
+
+    public Produto(){
+        //Construtor vazio
+    }
+
+    //GETTERS
+
+
+    public long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public double getPreco() {
+        return preco;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    // SETTERS
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public void setPreco(double preco) {
+        this.preco = preco;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+}

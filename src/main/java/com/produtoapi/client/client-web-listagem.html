@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+</head>
+<body>
+    <h2>Lista de Produtos - HTML/JavaScript</h2>
+    <table id="produtosTable" border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Preço</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Linhas das tabelas serão inseridas aqui automaticamente-->
+        </tbody>
+    </table>
+    <!-- Mensagem de Erro-->
+     <div id="erroMensagem" style="color: red; display: none;">
+        Erro ao buscar produtos. Por favor, tente mais tarde
+     </div>
+
+     <div id="totalProdutos">Total de Produtos: 0</div>
+    
+     <!--Função JavaScript (similar aos métodos Java )-->
+     <script>
+        //funcao para listar os produtos
+        function listarProdutos(){
+            // Faz uma requisição GET para o end point de produtos
+            fetch('http://localhost:8080/produtos') // URL do endpoint
+            .then(response => {//O método .then() é usado para encadear ações
+                if(!response.ok){
+                    //Lança um Erro se a resposta não for ok
+                    // Quando um erro é lançado, o fluxo de execução do código é interrompido e salta para o bloco catch
+
+                    throw new Error('Erro na rede: ' + response.status);
+                }
+                //Converte a Resposta Para JSON
+                return response.json(); //Converte a Resposta Para JSON  
+                })
+                .then(data=> {
+                    // Obtém o corpo da tabela
+                    const tableBody =  document.getElementById('produtosTable').getElementsByTagName('tbody')[0];
+                    let totalProdutos = 0; // Inicializa um contador de produtos
+                    //Itera sobre os dados recebidos e cria linhas da tabela
+                    data.forEach(produto => {
+                        const row = tableBody.insertRow();
+                        const cellId = row.insertCell(0);
+                        const cellNome = row.insertCell(1);
+                        const cellPreco = row.insertCell(2);
+
+                        //Insere os dados nas células
+                        cellId.textContent = produto.id; // Insere o ID do produto na célula
+                        cellNome.textContent = produto.nome; // Insere o nome do produto na célula
+                        cellPreco.textContent = produto.preco; // INSERE O PREÇO DO PRODUTO NA CELULA
+
+                        totalProdutos++; // Incrementa o contador de produtos
+                    });
+                    //Exibe o total de Produtos
+                    document.getElementById('totalProdutos').textContent = 'Total de Produtos: ' + totalProdutos;
+                })
+                .catch(error => {
+                    console.log('Erro ao buscar produtos: ' , error); // Exibe o erro no console
+                    //Exibe a Mensagem de erro
+                    document.getElementById('erroMensagem').style.display = 'block'; // Exibe a mensagem de erro
+                });
+        }
+        //Executa a função listarProduto quando a página é recarregada
+        document.addEventListener('DOMContentLoaded', listarProdutos);
+     </script>
+</body>
+</html>
